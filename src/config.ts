@@ -7,6 +7,11 @@ export interface Config {
 }
 
 export const config: Config = {
-  site: { name: 'Devias Kit', description: '', themeColor: '#090a0b', url: getSiteURL() },
+  site: {
+    name: 'HSGraph 项目验收工作台',
+    description: '2023BAB078 大规模图数据智能处理技术研究',
+    themeColor: '#090a0b',
+    url: getSiteURL(),
+  },
   logLevel: (process.env.NEXT_PUBLIC_LOG_LEVEL as keyof typeof LogLevel) ?? LogLevel.ALL,
 };

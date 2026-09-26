@@ -1,4 +1,10 @@
-# Middle Check Demo
+# HSGraph 项目验收工作台
+
+默认入口：`/dashboard/acceptance`。按 2023BAB078 任务书及 HSGraph 1.5 测试报告展示功能、性能、容量和资源利用率，支持 SSE 日志、任务筛选、停止、结果柱状图、日志及结果导出。
+
+当前为报告数据复现模式，未接入实际图计算程序。新后端接口、数据说明和启动方法见 [backend/ACCEPTANCE.md](backend/ACCEPTANCE.md)。旧 FPGA 演示代码保留用于兼容，以下为其原有说明。
+
+## 原有 Middle Check Demo
 
 中期验收展示网页，包含 Next.js 前端和本地 Python 模拟后端。
 

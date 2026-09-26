@@ -61,13 +61,13 @@ export function SideNav(): React.JSX.Element {
         >
           <Box sx={{ flex: '1 1 auto' }}>
             <Typography sx={{color: '#BAB8B8', fontSize: '13px'}}>
-              国家重点研发计划
+              湖北省重点研发计划
             </Typography>
             <Typography color="inherit" sx={{fontSize: '15px'}} >
-              动态图计算机的高效高层次综合系统
+              大规模图数据智能处理
             </Typography>
             <Typography color="inherit" sx={{fontSize: '15px'}}>
-              (2024YFB4504200)
+              (2023BAB078)
             </Typography>
           </Box>
          </Box>

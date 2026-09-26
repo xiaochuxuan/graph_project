@@ -1,13 +1,31 @@
 from __future__ import annotations
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException, Query, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 
 from .mock_data import midterm_code_comparison, midterm_project_log, midterm_project_result
 from .sse import DEFAULT_STREAM_DURATION, sse_stream
+from .acceptance import catalog, selected_cases, replay
 
-app = FastAPI(title="Middle Check Local Mock Backend", version="1.0.0")
+app = FastAPI(title="HSGraph Acceptance Backend", version="2.0.0")
+
+
+@app.get("/api/acceptance/catalog")
+async def acceptance_catalog():
+    return catalog()
+
+
+@app.get("/api/acceptance/execute")
+async def acceptance_execute(request: Request, category: str = "all", algorithm: str = "all",
+                             dataset: str = "all", system: str = "all",
+                             delay: float = Query(default=0.18, ge=0, le=2)):
+    try:
+        cases = selected_cases(category, algorithm, dataset, system)
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+    return StreamingResponse(replay(cases, delay, request), media_type="text/event-stream",
+                             headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"})
 
 app.add_middleware(
     CORSMiddleware,

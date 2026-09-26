@@ -30,3 +30,7 @@ yarn-error.log*
 *.pptx
 __pycache__/
 *.pyc
+
+.runtime-python/
+tmp/
+*.tsbuildinfo

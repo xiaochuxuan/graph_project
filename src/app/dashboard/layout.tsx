@@ -34,14 +34,17 @@ export default function Layout({ children }: LayoutProps): React.JSX.Element {
         }}
       >
         <SideNav />
-        <Box sx={{ display: 'flex', flex: '1 1 auto', flexDirection: 'column', pl: { lg: 'var(--SideNav-width)'  } }}>
+        <Box sx={{ display: 'flex', flex: '1 1 auto', flexDirection: 'column', pl: { lg: 'var(--SideNav-width)' } }}>
           <main>
-            <Container maxWidth="xl" sx={{ padding: '32px 32px 32px 32px', margin: '32px auto 20px auto', backgroundColor: '#f5f7fa' }}>
+            <Container
+              maxWidth="xl"
+              sx={{ padding: { xs: '16px', md: '28px' }, margin: '0 auto', backgroundColor: '#f5f7fa' }}
+            >
               {children}
             </Container>
           </main>
         </Box>
       </Box>
-      </>
+    </>
   );
 }
