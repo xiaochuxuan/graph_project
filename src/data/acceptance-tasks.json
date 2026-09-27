@@ -1,0 +1,65 @@
+[
+  {
+    "id": "HSGR_GN0001",
+    "category": "function",
+    "algorithm": "bfs",
+    "dataset": "functional",
+    "title": "功能测试图 · BFS"
+  },
+  {
+    "id": "HSGR_GN0002",
+    "category": "function",
+    "algorithm": "sssp",
+    "dataset": "functional",
+    "title": "功能测试图 · SSSP"
+  },
+  {
+    "id": "HSGR_XL0003",
+    "category": "performance",
+    "algorithm": "bfs",
+    "dataset": "twitter",
+    "title": "Twitter-2010 · BFS"
+  },
+  {
+    "id": "HSGR_XL0004",
+    "category": "performance",
+    "algorithm": "sssp",
+    "dataset": "twitter",
+    "title": "Twitter-2010 · SSSP"
+  },
+  {
+    "id": "HSGR_XL0005",
+    "category": "performance",
+    "algorithm": "bfs",
+    "dataset": "friendster",
+    "title": "Friendster · BFS"
+  },
+  {
+    "id": "HSGR_XL0006",
+    "category": "performance",
+    "algorithm": "sssp",
+    "dataset": "friendster",
+    "title": "Friendster · SSSP"
+  },
+  {
+    "id": "HSGR_XL0007-BFS",
+    "category": "capacity",
+    "algorithm": "bfs",
+    "dataset": "large",
+    "title": "大规模测试图 · BFS"
+  },
+  {
+    "id": "HSGR_XL0007-SSSP",
+    "category": "capacity",
+    "algorithm": "sssp",
+    "dataset": "large",
+    "title": "大规模测试图 · SSSP"
+  },
+  {
+    "id": "HSGR_XL0008",
+    "category": "resource",
+    "algorithm": "bfs",
+    "dataset": "friendster",
+    "title": "Friendster · BFS"
+  }
+]

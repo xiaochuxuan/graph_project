@@ -5,15 +5,15 @@ import { useState } from 'react';
 import RouterLink from 'next/link';
 import { usePathname } from 'next/navigation';
 import Box from '@mui/material/Box';
+import Collapse from '@mui/material/Collapse';
 import Divider from '@mui/material/Divider';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import Collapse from '@mui/material/Collapse';
+import { CaretDown, CaretUp } from '@phosphor-icons/react';
 
 import type { NavItemConfig } from '@/types/nav';
 import { isNavItemActive } from '@/lib/is-nav-item-active';
 import { Logo } from '@/components/core/logo';
-import { CaretDown, CaretUp } from '@phosphor-icons/react';
 
 import { navItems } from './config';
 
@@ -35,44 +35,42 @@ export function SideNav(): React.JSX.Element {
         '--NavItem-icon-disabled-color': 'var(--mui-palette-neutral-600)',
         bgcolor: 'var(--SideNav-background)',
         color: 'var(--SideNav-color)',
-        display: { xs: 'none', lg: 'flex' },
+        display: 'flex',
         flexDirection: 'column',
-        height: '100%',
+        height: { xs: 'auto', lg: '100vh' },
+        overflowY: 'auto',
         left: 0,
         maxWidth: '100%',
-        position: 'fixed',
+        position: { xs: 'relative', lg: 'fixed' },
         scrollbarWidth: 'none',
         top: 0,
-        width: 'var(--SideNav-width)',
+        width: { xs: '100%', lg: 'var(--SideNav-width)' },
         zIndex: 'var(--SideNav-zIndex)',
         '&::-webkit-scrollbar': { display: 'none' },
       }}
     >
       <Stack spacing={2} sx={{ p: 3 }}>
-        <Box sx={{ display: 'inline-flex', alignItems: 'center'}}>
+        <Box sx={{ display: 'inline-flex', alignItems: 'center' }}>
           <Logo color="light" height={32} width={32} />
           <Box
-          sx={{
-            alignItems: 'center',
-            backgroundColor: 'var(--mui-palette-neutral-950)',
-            display: 'flex',
-            p: '4px 12px',
-          }}
-        >
-          <Box sx={{ flex: '1 1 auto' }}>
-            <Typography sx={{color: '#BAB8B8', fontSize: '13px'}}>
-              湖北省重点研发计划
-            </Typography>
-            <Typography color="inherit" sx={{fontSize: '15px'}} >
-              大规模图数据智能处理
-            </Typography>
-            <Typography color="inherit" sx={{fontSize: '15px'}}>
-              (2023BAB078)
-            </Typography>
+            sx={{
+              alignItems: 'center',
+              backgroundColor: 'var(--mui-palette-neutral-950)',
+              display: 'flex',
+              p: '4px 12px',
+            }}
+          >
+            <Box sx={{ flex: '1 1 auto' }}>
+              <Typography sx={{ color: '#BAB8B8', fontSize: '13px' }}>湖北省重点研发计划</Typography>
+              <Typography color="inherit" sx={{ fontSize: '15px' }}>
+                大规模图数据智能处理
+              </Typography>
+              <Typography color="inherit" sx={{ fontSize: '15px' }}>
+                (2023BAB078)
+              </Typography>
+            </Box>
           </Box>
-         </Box>
         </Box>
-
       </Stack>
       <Divider sx={{ borderColor: 'var(--mui-palette-neutral-700)' }} />
       <Box component="nav" sx={{ flex: '1 1 auto', p: '12px' }}>
@@ -106,7 +104,10 @@ interface NavItemProps extends NavItemConfig {
 function NavItem({ disabled, external, href, pathname, title, subItems }: NavItemProps): React.JSX.Element {
   const active = isNavItemActive({ href, pathname, subItems });
 
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(active);
+  React.useEffect(() => {
+    if (active) setOpen(true);
+  }, [active]);
   const handleClick = (): void => {
     if (subItems && subItems.length > 0) {
       setOpen(!open);
@@ -114,16 +115,16 @@ function NavItem({ disabled, external, href, pathname, title, subItems }: NavIte
   };
 
   return (
-    <Box sx={{margin: '4px 0 4px 0'}}>
+    <Box sx={{ margin: '4px 0 4px 0' }}>
       <Box
-        {...(href
+        {...(href && !subItems?.length
           ? {
               component: external ? 'a' : RouterLink,
               href,
               target: external ? '_blank' : undefined,
               rel: external ? 'noreferrer' : undefined,
             }
-          : { role: 'button' })}
+          : { component: 'button', type: 'button', 'aria-expanded': open })}
         sx={{
           alignItems: 'center',
           borderRadius: 1,
@@ -135,7 +136,11 @@ function NavItem({ disabled, external, href, pathname, title, subItems }: NavIte
           p: '4px 12px',
           position: 'relative',
           textDecoration: 'none',
-          whiteSpace: 'nowrap',
+          whiteSpace: 'normal',
+          textAlign: 'left',
+          width: '100%',
+          border: 0,
+          backgroundColor: 'transparent',
           ...(disabled && {
             bgcolor: 'var(--NavItem-disabled-background)',
             color: 'var(--NavItem-disabled-color)',
@@ -168,13 +173,15 @@ function NavItem({ disabled, external, href, pathname, title, subItems }: NavIte
           </Box>
         ) : null}
       </Box>
-      {subItems && subItems.length > 0 ? <Collapse in={open}>
+      {subItems && subItems.length > 0 ? (
+        <Collapse in={open}>
           <Box sx={{ pl: 3 }}>
             {subItems.map((subItem) => (
               <NavItem key={subItem.key} pathname={pathname} title={subItem.title} href={subItem.href} />
             ))}
           </Box>
-        </Collapse> : null}
+        </Collapse>
+      ) : null}
     </Box>
   );
 }

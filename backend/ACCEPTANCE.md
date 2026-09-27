@@ -2,6 +2,8 @@
 
 新入口为 `/dashboard/acceptance`，默认首页已切换到该入口。旧 FPGA 页面及 `/midterm` 接口保留用于兼容，不属于 HSGraph 验收数据。
 
+验收入口自动跳转到功能验证。左侧菜单仅列功能、性能、容量和资源利用率四项指标，页面地址为 `/dashboard/acceptance/function|performance|capacity|resource`。页内通过下拉框选择算法、数据集与系统，支持全部选项；切换指标关闭原日志连接。旧用例地址自动跳转至对应指标页面。
+
 ## 启动
 
 使用 Python 3.10 或以上版本，在仓库根目录执行：
@@ -25,11 +27,18 @@ python -m uvicorn backend.app.main:app --host 127.0.0.1 --port 8000
 
 ## API
 
+数据预处理演示入口为 `/dashboard/preprocessing`。支持选择数据集、目标系统、源格式与目标格式，通过日志及步骤进度演示读取、记录检查、邻接整理、格式组织和输出检查。格式选项为流程配置，不表示已确认各系统兼容性；不读取或生成图文件。处理记录导出明确包含 `mode=demo` 和 `fileGenerated=false`。
+
+- `GET /api/preprocessing/catalog`：预处理选项与步骤。
+- `GET /api/preprocessing/execute?dataset=twitter&system=hsgraph&`：预处理演示 SSE，事件为 log、progress、result、done；delay 可选，范围 0–2 秒。
+
+目标格式由后端 `SYSTEM_FORMATS` 自动绑定，前端不提供选择。演示配置为 HSGraph/CSR、Gunrock/Matrix Market、Tigr/边列表、Groute/CSR；这是可调整的演示配置，不是已核验的产品加载器契约。旧参数 target_format 仅在与绑定一致时接受，否则返回 422。结果的 preview 包含示例文件名、内容和字段说明，使用同一张 4 顶点 5 边示例图，不代表所选数据集的真实记录，也不会生成数据文件。
+
 - `GET /health`：健康检查。
 - `GET /api/acceptance/catalog`：项目、系统、算法、数据集、任务书要求和报告用例。
 - `GET /api/acceptance/execute?category=all&algorithm=all&dataset=all&system=all&delay=0.18`：SSE 日志。
 
-事件依次为 `start`、`log`、`result`、`progress`、`done`，data 为 JSON。筛选值见 catalog，all 表示全部。system 指定陪测系统时同时保留 HSGraph。未知筛选值或无报告证据的组合返回 HTTP 422。delay 为每条日志演示间隔，范围 0–2 秒。浏览器停止或页面卸载时关闭流，后端检测断开并结束复现。
+事件依次为 `start`、`log`、`result`、`progress`、`done`，data 为 JSON。筛选值见 catalog，all 表示全部。system 指定单个系统时仅返回该系统，并移除加速比和跨系统结论。全部系统模式的 log 事件包含 system 字段，前端按系统 Tab 展示、下载。未知筛选值或无报告证据的组合返回 HTTP 422。delay 为每条日志演示间隔，范围 0–2 秒。浏览器停止或页面卸载时关闭流，后端检测断开并结束复现。
 
 ## 验证
 
@@ -38,3 +47,5 @@ python -m pip install httpx
 python -m unittest discover -s backend/tests
 npm run build
 ```
+
+预处理页面不再提供任何格式选择。格式由系统自动设置，source_format 和 target_format 均可省略；传入不同于系统绑定的格式会返回 422。

@@ -9,7 +9,7 @@ data = {
     "algorithms": [{"id": "bfs", "label": "BFS", "description": "广度优先搜索，逐层遍历图中的可达顶点。"}, {"id": "sssp", "label": "SSSP", "description": "单源最短路径，求解源点到其他顶点的最短距离。"}],
     "datasets": [{"id": "twitter", "label": "Twitter-2010", "description": "委托方提供；用于 BFS / SSSP 性能对比，报告未列明顶点数及边数。"}, {"id": "friendster", "label": "Friendster", "description": "委托方提供；用于性能对比与 CPU / GPU 平均利用率测试。"}, {"id": "functional", "label": "功能测试图", "vertices": 34000000, "edges": 528000000, "description": "委托方提供；3400 万顶点、5.28 亿条边。"}, {"id": "large", "label": "大规模测试图", "vertices": 134000000, "edges": 2148000000, "description": "委托方提供；1.34 亿顶点、21.48 亿条边。"}],
     "requirements": [{"title": "计算性能提升不低于 1 倍", "target": "加速比 ≥ 2.0×", "evidence": "报告 7 组对比加速比为 2.1×–14.6×", "status": "报告支持"}, {"title": "不少于 1 亿顶点、10 亿条边", "target": "顶点 ≥ 1 亿；边 ≥ 10 亿", "evidence": "容量用例：1.34 亿顶点、21.48 亿条边", "status": "报告支持"}, {"title": "研制 1 套系统，支持至少 2 种编程模型", "target": "1 套系统 / ≥ 2 种编程模型", "evidence": "已列 HSGraph 1.5；报告的 BFS、SSSP 是算法，编程模型证据待补充", "status": "待补充"}],
-    "environment": ["Intel Xeon Gold 5117 · 2.00 GHz", "256 GB 内存 / 6 TB 硬盘", "Ubuntu 18.04.2 LTS", "GCC 12.1.0 / CUDA Toolkit 12.1", "报告未列明 GPU 型号"],
+    "environment": ["Intel Xeon Gold 5117 · 2.00 GHz", "256 GB 内存 / 6 TB 硬盘", "Ubuntu 18.04.2 LTS", "GCC 12.1.0 / CUDA Toolkit 12.1"],
     "sourceNote": "数据摘录自 HSGraph 1.5 测试报告的测试内容表；日志为报告记录复现。单次耗时和加速比保留报告原始舍入值，不用总耗时重新覆盖。",
     "cases": [],
 }

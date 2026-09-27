@@ -7,4 +7,8 @@ const config = {
   },
 };
 
-export default config;
+// Keep the running development server separate from production build output.
+export default (phase) => ({
+  ...config,
+  distDir: phase === 'phase-development-server' ? '.next-dev' : '.next',
+});

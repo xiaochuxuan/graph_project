@@ -7,8 +7,27 @@ from fastapi.responses import StreamingResponse
 from .mock_data import midterm_code_comparison, midterm_project_log, midterm_project_result
 from .sse import DEFAULT_STREAM_DURATION, sse_stream
 from .acceptance import catalog, selected_cases, replay
+from .preprocessing import preprocessing_catalog, validate, preprocess
 
 app = FastAPI(title="HSGraph Acceptance Backend", version="2.0.0")
+
+
+@app.get("/api/preprocessing/catalog")
+async def preprocessing_options():
+    return preprocessing_catalog()
+
+
+@app.get("/api/preprocessing/execute")
+async def preprocessing_execute(request: Request, dataset: str, system: str,
+                                source_format: str | None = None, target_format: str | None = None,
+                                delay: float = Query(default=0.4, ge=0, le=2)):
+    try:
+        validate(dataset, system, source_format, target_format)
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+    return StreamingResponse(preprocess(request, dataset, system, source_format, target_format, delay),
+                             media_type="text/event-stream",
+                             headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"})
 
 
 @app.get("/api/acceptance/catalog")

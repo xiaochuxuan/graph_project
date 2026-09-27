@@ -1,5 +1,7 @@
-import AcceptancePage from '@/components/acceptance/acceptance-page';
+import { redirect } from 'next/navigation';
+
+import tasks from '@/data/acceptance-categories.json';
 
 export default function Page() {
-  return <AcceptancePage />;
+  redirect(`/dashboard/acceptance/${tasks[0].id}`);
 }

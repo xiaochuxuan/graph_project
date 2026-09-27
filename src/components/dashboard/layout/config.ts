@@ -1,5 +1,11 @@
 import type { NavItemConfig } from '@/types/nav';
+import categories from '@/data/acceptance-categories.json';
 
 export const navItems = [
-  { key: 'acceptance', title: 'HSGraph 验收工作台', href: '/dashboard/acceptance' },
+  { key: 'preprocessing', title: '数据预处理', href: '/dashboard/preprocessing' },
+  ...categories.map((category) => ({
+    key: category.id,
+    title: category.title,
+    href: `/dashboard/acceptance/${category.id}`,
+  })),
 ] satisfies NavItemConfig[];

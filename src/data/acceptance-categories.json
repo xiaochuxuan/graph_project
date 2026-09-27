@@ -1,0 +1,6 @@
+[
+  { "id": "function", "title": "功能验证" },
+  { "id": "performance", "title": "性能对比" },
+  { "id": "capacity", "title": "容量验证" },
+  { "id": "resource", "title": "资源利用率" }
+]

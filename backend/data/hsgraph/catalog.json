@@ -109,8 +109,7 @@
     "Intel Xeon Gold 5117 · 2.00 GHz",
     "256 GB 内存 / 6 TB 硬盘",
     "Ubuntu 18.04.2 LTS",
-    "GCC 12.1.0 / CUDA Toolkit 12.1",
-    "报告未列明 GPU 型号"
+    "GCC 12.1.0 / CUDA Toolkit 12.1"
   ],
   "sourceNote": "数据摘录自 HSGraph 1.5 测试报告的测试内容表；日志为报告记录复现。单次耗时和加速比保留报告原始舍入值，不用总耗时重新覆盖。",
   "cases": [

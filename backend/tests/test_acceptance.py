@@ -23,10 +23,11 @@ class AcceptanceTests(unittest.TestCase):
         self.assertLess(response.text.index('event: log'), response.text.index('event: result'))
         self.assertTrue(response.headers['content-type'].startswith('text/event-stream'))
 
-    def test_system_filter_keeps_subject(self):
+    def test_system_filter_is_exclusive(self):
         response = self.client.get('/api/acceptance/execute?system=gunrock&delay=0')
         self.assertEqual(response.text.count('event: result'), 1)
-        self.assertIn('"system": "hsgraph"', response.text)
+        self.assertNotIn('"system": "hsgraph"', response.text)
+        self.assertNotIn('"speedup"', response.text)
         self.assertNotIn('"system": "tigr"', response.text)
 
     def test_invalid_or_missing_evidence(self):
@@ -34,6 +35,30 @@ class AcceptanceTests(unittest.TestCase):
                       'algorithm=sssp&system=gunrock', 'category=resource&dataset=twitter']:
             with self.subTest(query=query):
                 self.assertEqual(self.client.get('/api/acceptance/execute?' + query).status_code, 422)
+
+    def test_preprocessing_demo(self):
+        options = self.client.get('/api/preprocessing/catalog').json()
+        self.assertEqual(options['mode'], 'demo')
+        query = 'dataset=twitter&system=hsgraph&target_format=csr&delay=0'
+        response = self.client.get('/api/preprocessing/execute?' + query)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.text.count('event: progress'), 5)
+        self.assertIn('"fileGenerated": false', response.text)
+        self.assertTrue(response.text.rstrip().endswith('{"completed": 5}'))
+        self.assertEqual(self.client.get('/api/preprocessing/execute?' + query.replace('system=hsgraph', 'system=unknown')).status_code, 422)
+
+    def test_system_formats_are_fixed_and_previewed(self):
+        options = self.client.get('/api/preprocessing/catalog').json()
+        for system, target in options['systemFormats'].items():
+            query = f'dataset=twitter&system={system}&delay=0'
+            response = self.client.get('/api/preprocessing/execute?' + query)
+            self.assertEqual(response.status_code, 200)
+            self.assertIn(f'"targetFormat": "{target}"', response.text)
+            self.assertIn('"isSample": true', response.text)
+            self.assertIn('"fields":', response.text)
+            self.assertEqual(self.client.get('/api/preprocessing/execute?' + query + '&source_format=invalid').status_code, 422)
+            wrong = 'csr' if target != 'csr' else 'matrix-market'
+            self.assertEqual(self.client.get('/api/preprocessing/execute?' + query + '&target_format=' + wrong).status_code, 422)
 
 
 if __name__ == '__main__':
